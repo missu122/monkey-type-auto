@@ -28,6 +28,8 @@ VK_ESCAPE = 0x1B
 VK_F8 = 0x77
 VK_RETURN = 0x0D
 VK_TAB = 0x09
+VK_SHIFT = 0x10
+VK_INSERT = 0x2D
 VK_CONTROL = 0x11
 VK_V = 0x56
 
@@ -363,6 +365,15 @@ class TextTyperApp(tk.Tk):
     def _bind_shortcuts(self) -> None:
         for sequence in ("<Control-v>", "<Control-V>", "<Control-Cyrillic_em>", "<Control-Cyrillic_EM>"):
             self.bind_all(sequence, self._paste_from_clipboard_event)
+        self.bind_all("<Control-KeyPress>", self._control_key_event)
+
+    def _control_key_event(self, event: tk.Event) -> str | None:
+        keysym = str(getattr(event, "keysym", "")).lower()
+        char = str(getattr(event, "char", "")).lower()
+        keycode = int(getattr(event, "keycode", 0) or 0)
+        if keycode == VK_V or keysym in {"v", "cyrillic_em"} or char in {"v", "м"}:
+            return self._paste_from_clipboard_event(event)
+        return None
 
     def _paste_from_clipboard_event(self, event: tk.Event) -> str | None:
         if self.focus_get() is self.custom_tag_entry:
@@ -1442,7 +1453,7 @@ class TextTyperApp(tk.Tk):
             raise RuntimeError("Не удалось записать текст в буфер обмена.")
 
         time.sleep(0.08)
-        self._send_hotkey(VK_CONTROL, VK_V)
+        self._send_hotkey(VK_SHIFT, VK_INSERT)
 
         if previous_clipboard is not None:
             def restore_clipboard() -> None:
