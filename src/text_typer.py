@@ -178,18 +178,18 @@ class TextTyperApp(tk.Tk):
             except tk.TclError:
                 pass
 
-    def _app_root(self) -> Path:
-        source_dir = Path(__file__).resolve().parent
-        if source_dir.name == "src":
-            return source_dir.parent
-        return source_dir
-
         if png_path.exists():
             try:
                 self._icon_photo = tk.PhotoImage(file=str(png_path))
                 self.iconphoto(True, self._icon_photo)
             except tk.TclError:
                 pass
+
+    def _app_root(self) -> Path:
+        source_dir = Path(__file__).resolve().parent
+        if source_dir.name == "src":
+            return source_dir.parent
+        return source_dir
 
     def _build_ui(self) -> None:
         style = ttk.Style(self)
@@ -234,60 +234,24 @@ class TextTyperApp(tk.Tk):
 
         ttk.Checkbutton(
             controls,
-            text="Русский OCR фикс",
-            variable=self.russian_fix_var,
-        ).grid(row=2, column=0, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
-            text="Не печатать мусор OCR",
-            variable=self.strict_ocr_var,
-        ).grid(row=2, column=2, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
-            text="OCR в нижний регистр",
-            variable=self.lowercase_ocr_var,
-        ).grid(row=3, column=0, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
-            text="Продолжать OCR",
-            variable=self.repeat_ocr_var,
-        ).grid(row=3, column=2, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
-            text="Только русский",
-            variable=self.force_russian_var,
-        ).grid(row=4, column=0, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
-            text="Серый текст на продолжении",
-            variable=self.gray_text_only_var,
-        ).grid(row=4, column=2, columnspan=2, sticky="w", pady=(8, 0))
-
-        ttk.Checkbutton(
-            controls,
             text="Enter после слова",
             variable=self.enter_after_word_var,
-        ).grid(row=5, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        ).grid(row=2, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         ttk.Checkbutton(
             controls,
             text="Enter каждые 10 слов",
             variable=self.enter_every_10_words_var,
-        ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(8, 0))
+        ).grid(row=2, column=2, columnspan=2, sticky="w", pady=(8, 0))
 
         ttk.Checkbutton(
             controls,
             text="Свой тег",
             variable=self.custom_tag_enabled_var,
-        ).grid(row=6, column=2, columnspan=2, sticky="w", pady=(8, 0))
+        ).grid(row=3, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         self.custom_tag_entry = ttk.Entry(controls, textvariable=self.custom_tag_var, width=18)
-        self.custom_tag_entry.grid(row=6, column=4, columnspan=2, sticky="we", pady=(8, 0))
+        self.custom_tag_entry.grid(row=3, column=2, columnspan=3, sticky="we", pady=(8, 0))
 
         self.start_button = ttk.Button(controls, text="Start", command=self._start)
         self.start_button.grid(row=1, column=4, sticky="w", padx=(0, 8))
